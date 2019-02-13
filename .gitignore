@@ -1,2 +1,5 @@
 # Dependancies
 node_modules/
+
+# Debug stuff
+#.vscode/

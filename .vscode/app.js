@@ -1,12 +1,14 @@
-const Queue = require('../src/queue/Queue.js');
+const LinkedList = require('../src/linked-list/LinkedList.js');
 
-let queue = new Queue;
+let list = new LinkedList(true);
 
-queue.enqueue(10);
-queue.enqueue(20);
-queue.enqueue(30);
+list.prepend(2);
+list.append(3);
+// list.append(10);
 
-console.log(queue.isEmpty(), ', ', queue.size(), ', ', queue.peek(), ', ', queue.dequeue());
-console.log(queue.isEmpty(), ', ', queue.size(), ', ', queue.peek(), ', ', queue.dequeue());
-console.log(queue.isEmpty(), ', ', queue.size(), ', ', queue.peek(), ', ', queue.dequeue());
-console.log(queue.isEmpty(), ', ', queue.size(), ', ', queue.peek(), ', ', queue.dequeue());
+console.log(list.removeLast());
+console.log(list.head);
+// list.insertAt(4, 2);
+// console.log(list.head);
+// list.removeAt();
+// console.log(list.head);
