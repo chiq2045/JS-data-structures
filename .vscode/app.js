@@ -1,14 +1,14 @@
-const LinkedList = require('../src/linked-list/LinkedList.js');
+const BinaryTree = require('../src/btree/BinaryTree.js');
 
-let list = new LinkedList(true);
+let tree = new BinaryTree;
 
-list.prepend(2);
-list.append(3);
-// list.append(10);
+console.log(tree.insert(50));
+console.log(tree.insert(25));
+console.log(tree.insert(10));
+console.log(tree.insert(75));
+console.log(tree.contains(50));
+console.log(tree.contains(25));
+console.log(tree.contains(10));
+console.log(tree.contains(75));
 
-console.log(list.removeLast());
-console.log(list.head);
-// list.insertAt(4, 2);
-// console.log(list.head);
-// list.removeAt();
-// console.log(list.head);
+console.log(tree);

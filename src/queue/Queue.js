@@ -1,6 +1,6 @@
 const LinkedList = require('../linked-list/LinkedList');
 
-/** Class representing a queue FIFO*/
+/** Class representing a queue FIFO */
 class Queue extends LinkedList {
   /**
    * @class

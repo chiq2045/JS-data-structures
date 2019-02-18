@@ -14,7 +14,7 @@
             "--timeout",
             "999999",
             "--colors",
-            "${workspaceFolder}/tests/queue"
+            "${workspaceFolder}/tests/btree"
         ],
         "console": "integratedTerminal",
         "internalConsoleOptions": "neverOpen"
