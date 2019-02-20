@@ -23,6 +23,10 @@ class LinkedList {
 	 * @param {int} value - The value of the new node 
 	 */
   append(value) {
+		if (isNaN(value) || value == null) {
+			return;
+		}
+
     let node = new Node(value);
 		
     if (!this.head || !this.tail) {
@@ -48,6 +52,10 @@ class LinkedList {
 	 * @param {int} value - The value of the created node
 	 */
   prepend(value) {
+		if (isNaN(value) || value == null) {
+			return;
+		}
+
 		let node = new Node(value);
 		
 		node.next = this.head;
@@ -149,6 +157,10 @@ class LinkedList {
 	 * @param {int} index - The index that the node should be inserted at
 	 */
 	insertAt(value, index) {
+		if (isNaN(value) || value == null) {
+			return;
+		}
+
 		if (index < 0 || index > this.length ) {
 			throw Error('index is out of range');
 		}
