@@ -1,14 +1,14 @@
-const BinaryTree = require('../src/btree/BinaryTree.js');
+const AVLTree = require('../src/avl/AVLTree.js');
 
-let tree = new BinaryTree;
+let tree = new AVLTree();
 
 console.log(tree.insert(50));
 console.log(tree.insert(25));
 console.log(tree.insert(10));
-console.log(tree.insert(75));
-console.log(tree.contains(50));
-console.log(tree.contains(25));
-console.log(tree.contains(10));
-console.log(tree.contains(75));
-
+// console.log(tree.insert(75));
+// console.log(tree.insert(75));
+// console.log(tree.insert(100));
+// console.log(tree.insert(65));
+// console.log(tree.insert(30));
+// console.log(tree.insert(1));
 console.log(tree);

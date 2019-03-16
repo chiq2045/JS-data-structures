@@ -1,16 +1,16 @@
 const Node = require('./Node.js');
-const LinkedList = require('../linked-list/LinkedList.js');
+const Stack = require('../stack/Stack.js');
+const Queue = require('../queue/Queue.js');
 
 /** Class representing a binary tree */
 class BinaryTree {
   /**
    * @class
    * @property {Node} root - The root of the tree
-   * @property {int} depth - The depth of the tree
    */
   constructor() {
     this.root = null;
-    this.depth = 0;
+    this.height = 0;
   }
 
   /**
@@ -19,50 +19,56 @@ class BinaryTree {
    * @returns {boolean} True if value inserted. False if value exists
    */
   insert(value) {
-    let leaf = new Node(value);
-
     if (!this.root) {
-      this.root = leaf;
-      this.depth = this.updateDepth(this.root);
+      this.root = new Node(value);
       return true;
     }
 
-    let added = addLeaf(this.root, leaf);
-    this.depth = this.updateDepth(this.root);
-    return added;
+    let result = this.searchTree(this.root, value);
 
-    /**
-     * Recursively searches the tree for an empty spot to place the new leaf.
-     * For each leaf, if the value of the new leaf is less than that of the
-     * current leaf, it searches the left leaf if there is one. If there is
-     * none, it adds a new leaf there. Vice versa if the value of the new
-     * leaf is greater than the value of the current leaf. If it is the same
-     * it does not add a leaf
-     * @param {Node} root - the current leaf being searched through
-     * @param {Node} newLeaf - The new leaf to be added
-     * @returns {boolean} - True if added. False if leaf already exists
-     */
-    function addLeaf(root, newLeaf) {
-      if (newLeaf.value < root.value) {
-        if (root.left) {
-          return addLeaf(root.left, newLeaf);
-        } else {
-          root.left = newLeaf;
-          return true;
-        }
-      } else if (newLeaf.value > root.value) {
-        if (root.right) {
-          return addLeaf(root.right, newLeaf);
-        } else {
-          root.right = newLeaf;
-          return true;
-        }
+    this.height = this.getHeight(this.root);
+
+    return result;
+  }
+  
+  /**
+   * Recursively searches the tree and perfoms the action indicated by mode
+   * @param {Node} root - The current root
+   * @param {number} value - The node being searched for
+   * @param {boolean} mode - The operation to complete: false=insert, true=find
+   * @returns {boolean} - True if operation completed succesfully
+   */
+  searchTree(root, value, mode = false) {
+    if (value < root.value) {
+      if (root.left) {
+        return this.searchTree(root.left, value, mode);
       } else {
-        return false;      
+        if (mode) {
+          return false;
+        } else {
+          root.setLeftNode(value);
+          return true;
+        }
+      }
+    } else if (value > root.value) {
+      if (root.right) {
+        return this.searchTree(root.right, value, mode);
+      } else {
+        if (mode) {
+          return false;
+        } else {
+          root.setRightNode(value);
+          return true;
+        }
+      }
+    } else {
+      if (mode) {
+        return true;
+      } else {
+        return false;
       }
     }
   }
-
   
   /**
    * Searches the tree for a value
@@ -73,28 +79,8 @@ class BinaryTree {
     if (!this.root) {
       return false;
     }
-    
-    return findLeaf(this.root, value);
 
-    /**
-     * Recursively searches the tree leaf by leaf depending on the value
-     * being searched for. If the value is less than that of the current
-     * leaf, search the left leaf; if greater, search the right leaf
-     * @param {Node} root - The current leaf being searhced
-     * @param {Node} value - The value being searched for
-     * @returns {boolean} - True if the leaf is found. False otherwise
-     */
-    function findLeaf(root, value) {
-      if (value < root.value && root.left) {
-        return findLeaf(root.left, value);
-      } else if (value > root.value && root.right) {
-        return findLeaf(root.right, value);
-      } else if (value === root.value) {
-        return true;     
-      } else {
-        return false;
-      }
-    }
+    return this.searchTree(this.root, value, true);
   }
 
   /**
@@ -103,28 +89,25 @@ class BinaryTree {
    */
   printBreadthFirst() {
     if (!this.root) {
-        return;
-    }
-    
-    let list = new LinkedList();
-    for (let depth = this.depth; depth >= 0; depth--) {
-      addToListFromBottom(this.root, depth);
+      return;
     }
 
-    function addToListFromBottom(root, depth) {
-      let d = depth;
-      if (root.right) {
-        addToListFromBottom(root.right, d-1);
+    let queue = new Queue();
+
+    queue.enqueue(this.root);
+
+    while (!queue.isEmpty()) {
+      let currentNode = queue.dequeue();
+      console.log(currentNode.value);
+
+      if (currentNode.left) {
+        queue.enqueue(currentNode.left);
       }
-      if (root.left) {
-        addToListFromBottom(root.left, d-1);
-      }
-      if (d === 0) {
-        list.prepend(root.value);
+
+      if (currentNode.right) {
+        queue.enqueue(currentNode.right);
       }
     }
-
-    list.print()
   }
 
   /**
@@ -136,20 +119,25 @@ class BinaryTree {
       return;
     }
 
-    let list = new LinkedList();
-    addToLostFromLeft(this.root);
+    let stack = new Stack();
 
-    function addToLostFromLeft(root) {
-      list.append(root.value);
-      if (root.left) {
-        addToLostFromLeft(root.left);
+    populateStack(this.root);
+
+    while (!stack.isEmpty()) {
+      console.log(stack.pop().value)
+    }
+    function populateStack(root) {
+      if (!root) {
+        return;
       }
-      if (root.right) {
-        addToLostFromLeft(root.right)
-      }
+
+      populateStack(root.right);
+      
+      populateStack(root.left);
+
+      stack.push(root);
     }
 
-    list.print();
   }
   
   /**
@@ -159,29 +147,17 @@ class BinaryTree {
    * when there are no more "roots" that have leaves. The depth is
    * the longest distance travelled between the main root and any other root
    * @param {Node} root - The current leaf acting as root
-   * @returns {number} - The current depth of the tree
    */
-  updateDepth(root) {
-    let depth = 0;
-    let leftDepth = 0;
-    let rightDepth = 0;
-  
+  getHeight(root) {
     if (!root) {
-      return depth;
-    } else {
-      depth = 1;
+      return;
     }
-  
-    if (root.left) {
-      leftDepth = this.updateDepth(root.left);
-    }
-  
-    if (root.right) {
-      rightDepth = this.updateDepth(root.right);
-    }
-  
-    depth += Math.max(leftDepth, rightDepth);
-    return depth;
+
+    this.getHeight(root.left);
+
+    this.getHeight(root.right);
+    
+    return root.getHeight();
   }
 
 }

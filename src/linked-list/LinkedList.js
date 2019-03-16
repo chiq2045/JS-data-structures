@@ -23,9 +23,9 @@ class LinkedList {
 	 * @param {int} value - The value of the new node 
 	 */
   append(value) {
-		if (isNaN(value) || value == null) {
-			return;
-		}
+		// if (isNaN(value) || value == null) {
+		// 	return;
+		// }
 
     let node = new Node(value);
 		
@@ -52,9 +52,9 @@ class LinkedList {
 	 * @param {int} value - The value of the created node
 	 */
   prepend(value) {
-		if (isNaN(value) || value == null) {
-			return;
-		}
+		// if (isNaN(value) || value == null) {
+		// 	return;
+		// }
 
 		let node = new Node(value);
 		
