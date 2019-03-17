@@ -6,7 +6,7 @@ class AVLTree extends BinaryTree {
   insert(value) {
     let result = super.insert(value);
 
-    this.balanceTree(this.root);
+    this.root = this.balanceTree(this.root);
     return result;
   }
 
@@ -35,55 +35,86 @@ class AVLTree extends BinaryTree {
     if (!this.isBalanced(root)) {
       if (root.getLeftHeight() < root.getRightHeight()) {
         if (!root.left) {
-          this.rightRightRotation(root);
+          root = this.rightRightRotation(root);
         } else {
-          this.rightLeftRotation(root);
+          root = this.rightLeftRotation(root);
         }
       } else {
         if(!root.right) {
-          this.leftLeftRotation(root);
+          root = this.leftLeftRotation(root);
         } else {
-          this.leftRightRotation(root);
+          root = this.leftRightRotation(root);
         }
       }
-    } else {
+    } /*else {
       this.balanceTree(root.left);
       this.balanceTree(root.right);
-    }
+    }*/
+
+    return root;
   }
 
   rightRightRotation(root) {
-    let a = root;
-    let b = a.right;
+    let stack = new Stack();
 
-    a.right = b.left;
-    b.left = a;
+    stack.push(root);
+    root = root.right;
+
+    stack.peek().right = root.left;
+    root.left = stack.pop();
+
+    return root;
   }
   
   rightLeftRotation(root) {
-    let b = root.right;
-    let c = b.left;
+    let stack = new Stack();
 
-    c.left = b.right;
-    b.right = c;
-    this.rightRightRotation(root);
+    stack.push(root);
+    root = root.right;
+
+    stack.push(root);
+    root = root.left;
+
+    stack.peek().left = root.right;
+    root.right = stack.pop();
+
+    stack.peek().right = root.left;
+    root = stack.pop();
+
+    root = this.rightRightRotation(root);
+    return root;
   }
   
   leftLeftRotation(root) {
-    let a = root;
-    let b = a.left;
+    let stack = new Stack();
 
-    a.left = b.right;
-    b.right = a;
+    stack.push(root);
+    root = root.left;
+    
+    stack.peek().left = root.right;
+    root.right = stack.pop();
+
+    return root;
   }
 
-  leftRightRotation(root) {
-    let b = root.left;
-    let c = b.right;
 
-    c.right = b.left;
-    b.left = c;
-    this.leftLeftRotation(root);
+  leftRightRotation(root) {
+    let stack = new Stack();
+
+    stack.push(root);
+    root = root.left;
+
+    stack.push(root);
+    root = root.right;
+
+    stack.peek().right = root.left;
+    root.left = stack.pop();
+
+    stack.peek().left = root;
+    root = stack.pop();
+
+    root = this.leftLeftRotation(root);
+    return root;
   }
 }
 
